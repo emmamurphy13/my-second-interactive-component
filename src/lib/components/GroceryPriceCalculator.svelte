@@ -2,65 +2,108 @@
 @component
 GroceryPriceCalculator.svelte — Interactive Grocery Price Tracker
 
-Allows users to select grocery items and see the price increases mentioned in the article.
+Allows users to select grocery items, input quantities, and calculate total costs.
 
 USAGE EXAMPLE:
 <GroceryPriceCalculator />
 -->
 <script>
-  let selectedItems = $state([]);
+  let quantities = $state({});
 
   const groceryItems = [
-    { id: 'beef', name: 'Beef', priceChange: '+16.4%', oldPrice: 'was ~$8.50/lb' },
-    { id: 'coffee', name: 'Coffee', priceChange: '+19.8%', oldPrice: 'was ~$5.00/lb' },
-    { id: 'lettuce', name: 'Lettuce', priceChange: '+7.3%', oldPrice: 'was ~$2.00/head' },
-    { id: 'fish', name: 'Frozen Fish', priceChange: '+8.6%', oldPrice: 'was ~$9.00/lb' },
-    { id: 'groundbeef', name: 'Ground Beef', priceChange: '$6.69/lb', oldPrice: 'was $5.61/lb' },
-    { id: 'bananas', name: 'Bananas', priceChange: '+5.9%', oldPrice: 'was ~$0.55/lb' },
-    { id: 'eggs', name: 'Eggs', priceChange: '-20.9%', oldPrice: 'was ~$3.50/dz', discount: true },
+    { id: 'beef', name: 'Beef', currentPrice: 9.89, oldPrice: 8.50, unit: '/lb', discount: false },
+    { id: 'coffee', name: 'Coffee', currentPrice: 5.99, oldPrice: 5.00, unit: '/lb', discount: false },
+    { id: 'lettuce', name: 'Lettuce', currentPrice: 2.15, oldPrice: 2.00, unit: '/head', discount: false },
+    { id: 'fish', name: 'Frozen Fish', currentPrice: 9.77, oldPrice: 9.00, unit: '/lb', discount: false },
+    { id: 'groundbeef', name: 'Ground Beef', currentPrice: 6.69, oldPrice: 5.61, unit: '/lb', discount: false },
+    { id: 'bananas', name: 'Bananas', currentPrice: 0.58, oldPrice: 0.55, unit: '/lb', discount: false },
+    { id: 'eggs', name: 'Eggs', currentPrice: 2.77, oldPrice: 3.50, unit: '/dz', discount: true },
   ];
 
-  function toggleItem(id) {
-    const index = selectedItems.indexOf(id);
-    if (index > -1) {
-      selectedItems.splice(index, 1);
-    } else {
-      selectedItems.push(id);
+  function calculateTotal() {
+    let total = 0;
+    for (const id in quantities) {
+      const quantity = parseFloat(quantities[id]) || 0;
+      const item = groceryItems.find(i => i.id === id);
+      if (item && quantity > 0) {
+        total += item.currentPrice * quantity;
+      }
     }
-    selectedItems = selectedItems;
+    return total.toFixed(2);
   }
 
-  function getItemCount() {
-    return selectedItems.length;
+  function calculateOldTotal() {
+    let total = 0;
+    for (const id in quantities) {
+      const quantity = parseFloat(quantities[id]) || 0;
+      const item = groceryItems.find(i => i.id === id);
+      if (item && quantity > 0) {
+        total += item.oldPrice * quantity;
+      }
+    }
+    return total.toFixed(2);
+  }
+
+  function getSelectedCount() {
+    return Object.keys(quantities).filter(id => parseFloat(quantities[id]) > 0).length;
+  }
+
+  function hasQuantities() {
+    return Object.values(quantities).some(q => parseFloat(q) > 0);
   }
 </script>
 
 <div class="calculator">
-  <h3>Which grocery items are affecting your budget?</h3>
-  <p class="subtitle">Select the items you buy. See how much prices have changed.</p>
+  <h3>Calculate your grocery bill</h3>
+  <p class="subtitle">Enter quantities to see how much prices have increased</p>
 
   <div class="items-list">
     {#each groceryItems as item (item.id)}
-      <button 
-        class="item"
-        class:selected={selectedItems.includes(item.id)}
-        onclick={() => toggleItem(item.id)}
-      >
-        <span class="checkbox">{selectedItems.includes(item.id) ? '✓' : '○'}</span>
+      <div class="item">
         <div class="item-info">
           <span class="item-name">{item.name}</span>
-          <span class="item-old-price">{item.oldPrice}</span>
+          <span class="item-price" class:discount={item.discount}>
+            ${item.currentPrice.toFixed(2)}{item.unit}
+            {#if !item.discount}
+              <span class="price-change">(was ${item.oldPrice.toFixed(2)}{item.unit})</span>
+            {:else}
+              <span class="price-change discount-text">(was ${item.oldPrice.toFixed(2)}{item.unit})</span>
+            {/if}
+          </span>
         </div>
-        <span class="item-change" class:discount={item.discount}>
-          {item.priceChange}
-        </span>
-      </button>
+        <div class="item-input">
+          <input 
+            type="number" 
+            placeholder="0" 
+            min="0" 
+            step="0.1"
+            bind:value={quantities[item.id]}
+            class="quantity-input"
+          />
+          <span class="unit-label">{item.unit.substring(1)}</span>
+        </div>
+      </div>
     {/each}
   </div>
 
-  {#if selectedItems.length > 0}
+  {#if hasQuantities()}
     <div class="summary">
-      <p>You've selected <strong>{getItemCount()} item{getItemCount() !== 1 ? 's' : ''}</strong> that have increased in price.</p>
+      <div class="summary-row">
+        <span class="summary-label">You selected:</span>
+        <span class="summary-value">{getSelectedCount()} item{getSelectedCount() !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Current total cost:</span>
+        <span class="summary-value current">${calculateTotal()}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Previous total cost:</span>
+        <span class="summary-value old">${calculateOldTotal()}</span>
+      </div>
+      <div class="summary-row difference">
+        <span class="summary-label">Price increase:</span>
+        <span class="summary-value increase">+${(calculateTotal() - calculateOldTotal()).toFixed(2)}</span>
+      </div>
     </div>
   {/if}
 </div>
@@ -104,7 +147,6 @@ USAGE EXAMPLE:
     border: none;
     border-bottom: 1px solid var(--color-border);
     background: transparent;
-    cursor: pointer;
     width: 100%;
     text-align: left;
     transition: background-color 0.2s ease;
@@ -115,23 +157,6 @@ USAGE EXAMPLE:
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.02);
-    }
-
-    &.selected {
-      background-color: rgba(0, 81, 186, 0.05);
-    }
-  }
-
-  .checkbox {
-    font-size: 1.5rem;
-    color: var(--color-medium-gray);
-    flex-shrink: 0;
-    width: 24px;
-    text-align: center;
-
-    .item.selected & {
-      color: var(--color-link);
-      font-weight: bold;
     }
   }
 
@@ -149,38 +174,110 @@ USAGE EXAMPLE:
     font-size: var(--font-size-base);
   }
 
-  .item-old-price {
+  .item-price {
     font-family: var(--font-sans);
-    font-size: var(--font-size-xs);
-    color: var(--color-medium-gray);
-  }
-
-  .item-change {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    color: #d32f2f;
     font-size: var(--font-size-sm);
-    white-space: nowrap;
-    padding: 0.25rem 0.5rem;
-    background: rgba(211, 47, 47, 0.1);
-    border-radius: 3px;
+    color: var(--color-dark);
+    font-weight: 600;
 
     &.discount {
       color: #388e3c;
-      background: rgba(56, 142, 60, 0.1);
     }
   }
 
-  .summary {
-    padding: var(--spacing-sm);
-    background: rgba(0, 81, 186, 0.08);
-    border-left: 3px solid var(--color-link);
-    margin-top: var(--spacing-md);
+  .price-change {
+    font-weight: 400;
+    color: var(--color-medium-gray);
+    display: block;
+    font-size: var(--font-size-xs);
+    margin-top: 0.25rem;
 
-    p {
-      margin: 0;
-      font-size: var(--font-size-sm);
+    &.discount-text {
+      color: #388e3c;
+    }
+  }
+
+  .item-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .quantity-input {
+    width: 70px;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    text-align: center;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-link);
+      box-shadow: 0 0 0 2px rgba(0, 81, 186, 0.1);
+    }
+  }
+
+  .unit-label {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-xs);
+    color: var(--color-medium-gray);
+    min-width: 35px;
+    text-align: left;
+  }
+
+  .summary {
+    padding: var(--spacing-md);
+    background: rgba(0, 81, 186, 0.08);
+    border: 1px solid rgba(0, 81, 186, 0.2);
+    border-radius: 3px;
+    margin-top: var(--spacing-md);
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 81, 186, 0.1);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.difference {
+      padding-top: var(--spacing-sm);
+      margin-top: var(--spacing-sm);
+      border-top: 2px solid rgba(0, 81, 186, 0.2);
+    }
+  }
+
+  .summary-label {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    color: var(--color-dark);
+    font-weight: 500;
+  }
+
+  .summary-value {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-dark);
+
+    &.current {
       color: var(--color-dark);
+    }
+
+    &.old {
+      color: var(--color-medium-gray);
+    }
+
+    &.increase {
+      color: #d32f2f;
+      font-size: var(--font-size-lg);
     }
   }
 </style>
