@@ -39,32 +39,14 @@ SiteHeader.svelte — NYCity News Service Style Header
   @use '../styles' as *;
 
   .site-header {
-    border-bottom: 0px solid var(--color-accent);
-    box-shadow: 0 2px 4px var(--color-shadow);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: none;
+    background-color: var(--color-white);
   }
 
-  /* Full-width blue background with animated dark-to-light gradient */
+  /* Clean, minimal masthead */
   .masthead-wrapper {
-    background: linear-gradient(
-      90deg,
-      var(--color-cuny-blue-dark) 0%,
-      var(--color-cuny-blue) 50%,
-      var(--color-cuny-blue-light) 100%
-    );
-    background-size: 200% 100%;
-    animation: gradient-sweep 6s ease-in-out infinite;
-  }
-
-  @keyframes gradient-sweep {
-    0% {
-      background-position: 0% 0%;
-    }
-    50% {
-      background-position: 100% 0%;
-    }
-    100% {
-      background-position: 0% 0%;
-    }
+    background: var(--color-white);
   }
 
   /* Compact Masthead - Mobile: centered */
@@ -93,12 +75,12 @@ SiteHeader.svelte — NYCity News Service Style Header
   }
 
   .logo-nycity {
-    background-color: var(--color-white);
-    color: var(--color-accent);
+    background-color: var(--color-dark);
+    color: var(--color-white);
     font-family: var(--font-sans);
     font-size: var(--font-size-sm);
-    font-weight: 800;
-    padding: 0.15rem 0.35rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
     letter-spacing: 0.02em;
     text-transform: uppercase;
     display: flex;
@@ -106,11 +88,11 @@ SiteHeader.svelte — NYCity News Service Style Header
   }
 
   .logo-news-service {
-    color: var(--color-white);
+    color: var(--color-dark);
     font-family: var(--font-sans);
     font-size: var(--font-size-sm);
-    font-weight: 300;
-    padding: 0.15rem 0.35rem;
+    font-weight: 400;
+    padding: 0.25rem 0.5rem;
     letter-spacing: -0.01em;
     display: flex;
     align-items: center;

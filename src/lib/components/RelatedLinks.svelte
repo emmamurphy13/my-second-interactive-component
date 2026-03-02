@@ -43,6 +43,8 @@ USAGE EXAMPLE:
 
   .related-links {
     margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--color-border);
   }
 
   .related-title {
@@ -50,18 +52,18 @@ USAGE EXAMPLE:
     align-items: center;
     gap: var(--spacing-sm);
     font-family: var(--font-sans);
-    font-size: var(--font-size-sm);
-    font-weight: 700;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-dark);
+    letter-spacing: 0.1em;
+    color: var(--color-medium-gray);
     margin-bottom: var(--spacing-md);
 
     &::after {
       content: '';
       flex: 1;
-      height: 2px;
-      background-color: var(--color-accent);
+      height: 1px;
+      background-color: var(--color-border);
     }
   }
 
@@ -74,7 +76,7 @@ USAGE EXAMPLE:
   .link-item {
     margin-bottom: var(--spacing-md);
     padding-bottom: var(--spacing-md);
-    border-bottom: var(--border-width-thin) solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
 
     &:last-child {
       margin-bottom: 0;
@@ -85,8 +87,8 @@ USAGE EXAMPLE:
 
   .link {
     font-family: var(--font-serif);
-    font-size: var(--font-size-lg); // Mobile-first: smaller size
-    font-weight: 400;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
     color: var(--color-dark);
     text-decoration: none;
     line-height: 1.3;
@@ -94,12 +96,12 @@ USAGE EXAMPLE:
     transition: color 0.2s ease;
 
     &:hover {
-      color: var(--color-accent);
-      text-decoration: none;
+      color: var(--color-link);
+      text-decoration: underline;
     }
 
     @include tablet {
-      font-size: var(--font-size-xl); // Larger screens: bigger size
+      font-size: var(--font-size-xl);
     }
   }
 </style>

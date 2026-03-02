@@ -27,14 +27,14 @@ USAGE EXAMPLE:
   /* Mobile-first: smaller text */
   .article-body {
     font-family: var(--font-sans);
-    font-size: var(--font-size-base);
-    line-height: 1.75;
+    font-size: var(--font-size-lg);
+    line-height: 1.8;
     color: var(--color-text);
   }
 
   /* Paragraph styling */
   .article-body :global(p) {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 1.5rem;
   }
 
   .article-body :global(p:last-child) {
@@ -43,13 +43,15 @@ USAGE EXAMPLE:
 
   /* Links within article body */
   .article-body :global(a) {
-    color: var(--color-dark);
-    text-decoration: underline;
-    text-underline-offset: 2px;
+    color: var(--color-link);
+    text-decoration: none;
+    text-underline-offset: 0;
+    border-bottom: 1px solid var(--color-link);
   }
 
   .article-body :global(a:hover) {
-    color: var(--color-accent);
+    color: var(--color-link-hover);
+    border-bottom-color: var(--color-link-hover);
   }
 
   /* Subheadings within article */
@@ -71,15 +73,15 @@ USAGE EXAMPLE:
     color: var(--color-dark);
   }
 
-  /* Block quotes - NYCity style with blue left border */
+  /* Block quotes - NYT style with left border */
   .article-body :global(blockquote) {
-    border-left: var(--border-width-accent) solid var(--color-accent);
+    border-left: 4px solid var(--color-medium-gray);
     margin: var(--spacing-lg) 0;
-    padding: var(--spacing-sm) var(--spacing-sm);
+    padding: 0 var(--spacing-md);
     font-style: italic;
-    font-size: var(--font-size-lg);
-    line-height: 1.6;
-    color: var(--color-dark);
+    font-size: var(--font-size-base);
+    line-height: 1.8;
+    color: var(--color-text);
   }
 
   .article-body :global(blockquote p) {
@@ -110,8 +112,7 @@ USAGE EXAMPLE:
     }
 
     .article-body :global(blockquote) {
-      font-size: var(--font-size-xl);
-      padding-left: var(--spacing-md);
+      font-size: var(--font-size-base);
     }
   }
 </style>

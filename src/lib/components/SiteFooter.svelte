@@ -36,7 +36,8 @@ USAGE EXAMPLE:
 
 <style>
   .site-footer {
-    background-color: var(--color-light-gray);
+    background-color: var(--color-white);
+    border-top: 1px solid var(--color-border);
     padding: var(--spacing-xl) var(--spacing-md);
     margin-top: var(--spacing-xxl);
   }
@@ -63,21 +64,22 @@ USAGE EXAMPLE:
   }
 
   .footer-link {
-    color: var(--color-dark);
+    color: var(--color-link);
     text-decoration: none;
     font-family: var(--font-sans);
     font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
+    font-weight: 500;
+    letter-spacing: 0;
     transition: color 0.2s ease;
   }
 
   .footer-link:hover {
-    color: var(--color-accent);
+    color: var(--color-link-hover);
+    text-decoration: underline;
   }
 
   .footer-divider {
-    color: var(--color-medium-gray);
+    color: var(--color-border);
     margin: 0 var(--spacing-sm);
   }
 </style>

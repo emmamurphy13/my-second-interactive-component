@@ -78,7 +78,7 @@ USAGE EXAMPLE:
     font-size: 2rem;
     font-weight: 700;
     line-height: 1.15;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
     color: var(--color-dark);
   }
 
@@ -87,9 +87,9 @@ USAGE EXAMPLE:
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-xs);
-    padding: var(--font-size-xs) var(--spacing-sm);
-    border-left: var(--border-width-accent) solid var(--color-accent);
-    background-color: var(--color-light-gray);
+    padding: 0;
+    border: none;
+    background-color: transparent;
   }
 
   .meta-item {
@@ -98,12 +98,12 @@ USAGE EXAMPLE:
     gap: var(--spacing-xs);
     font-size: var(--font-size-sm);
     color: var(--color-medium-gray);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    text-transform: none;
+    letter-spacing: 0;
   }
 
   .meta-icon {
-    color: var(--color-accent);
+    color: var(--color-medium-gray);
     flex-shrink: 0;
   }
 
